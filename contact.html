@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Contact — Oncology IT Solutions</title>
+<meta name="description" content="Get in touch about Radiation Oncology systems support, upgrades, or consulting.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@500;600&family=IBM+Plex+Sans:wght@400;500&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="site">
+  <div class="nav-inner">
+    <a href="index.html" class="brand">Oncology<span>IT</span>Solutions</a>
+    <nav class="links">
+      <a href="index.html">About</a>
+      <a href="contact.html">Contact</a>
+    </nav>
+  </div>
+</header>
+
+<section class="hero contact-hero">
+  <div class="hero-inner">
+    <span class="eyebrow">Get in touch</span>
+    <h1>Let's talk about your systems.</h1>
+    <p class="lede">Questions, support needs, or consulting inquiries &mdash; send a message and I'll get back to you directly.</p>
+  </div>
+</section>
+
+<!--
+  FORM SETUP (Formspree):
+  1. Go to formspree.io and create a free account using oncologyitsolutions@gmail.com
+  2. Create a new form, verify the email when Formspree sends the confirmation link
+  3. Copy the Form ID Formspree gives you (looks like "mxxxxxxx")
+  4. Replace YOUR_FORM_ID below with that ID
+-->
+<form id="contact-form" action="https://formspree.io/f/xbdnlwrl" method="POST">
+  <div class="field">
+    <label for="name">Name</label>
+    <input type="text" id="name" name="name" required>
+  </div>
+  <div class="field">
+    <label for="email">Email</label>
+    <input type="email" id="email" name="email" required>
+  </div>
+  <div class="field">
+    <label for="message">Message</label>
+    <textarea id="message" name="message" required></textarea>
+  </div>
+  <div id="form-status" role="status"></div>
+  <div class="submit-row">
+    <button type="submit" id="submit-btn">Send message</button>
+  </div>
+</form>
+
+<footer class="site">
+  <div class="wrap">
+    <span>&copy; <span id="year"></span> Oncology IT Solutions</span>
+    <a href="index.html">About</a>
+  </div>
+</footer>
+
+<script>
+document.getElementById('year').textContent = new Date().getFullYear();
+
+const form = document.getElementById('contact-form');
+const status = document.getElementById('form-status');
+const btn = document.getElementById('submit-btn');
+
+form.addEventListener('submit', async function (e) {
+  e.preventDefault();
+  btn.disabled = true;
+  btn.textContent = 'Sending…';
+  status.className = '';
+  status.style.display = 'none';
+
+  try {
+    const response = await fetch(form.action, {
+      method: 'POST',
+      body: new FormData(form),
+      headers: { 'Accept': 'application/json' }
+    });
+
+    if (response.ok) {
+      status.textContent = "Message sent — thanks for reaching out. I'll get back to you soon.";
+      status.className = 'success';
+      form.reset();
+    } else {
+      status.textContent = "Something went wrong sending your message. Please try again, or email directly.";
+      status.className = 'error';
+    }
+  } catch (err) {
+    status.textContent = "Something went wrong sending your message. Please try again, or email directly.";
+    status.className = 'error';
+  } finally {
+    btn.disabled = false;
+    btn.textContent = 'Send message';
+  }
+});
+</script>
+</body>
+</html>
